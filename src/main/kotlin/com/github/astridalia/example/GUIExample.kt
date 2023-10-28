@@ -1,7 +1,7 @@
-package github.astridalia.example
+package com.github.astridalia.example
 
-import github.astridalia.ButtonCompletion
-import github.astridalia.InventoryGUI
+import com.github.astridalia.ButtonCompletion
+import com.github.astridalia.InventoryGUI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player

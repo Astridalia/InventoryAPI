@@ -1,4 +1,4 @@
-package github.astridalia
+package com.github.astridalia
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
