@@ -1,7 +1,5 @@
 plugins {
     kotlin("jvm") version "1.9.0"
-    `maven-publish`
-    application
 }
 
 group = "com.github.astridalia"
@@ -19,11 +17,8 @@ repositories {
 dependencies {
     implementation("io.insert-koin:koin-core:3.5.0")
     implementation("org.reflections:reflections:0.10.2")
-    compileOnly("org.spigotmc:spigot-api:1.14.1-R0.1-SNAPSHOT")
     implementation("com.google.code.gson:gson:2.10.1")
     testImplementation(kotlin("test"))
-
-
 }
 
 tasks.test {
@@ -34,6 +29,3 @@ kotlin {
     jvmToolchain(8)
 }
 
-application {
-    mainClass.set("MainKt")
-}
