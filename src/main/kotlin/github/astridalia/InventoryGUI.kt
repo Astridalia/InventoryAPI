@@ -65,7 +65,8 @@ abstract class InventoryGUI<T : JavaPlugin>(private val plugin: T) : InventoryHo
         val player = event.whoClicked as Player
         event.isCancelled = true
 
-        val result = item?.onClick(player, event.currentItem) ?: ButtonAction.CANCEL
+
+        val result = item?.onClick?.onClick(player, item.itemStack) ?: return
 
         if (result == ButtonAction.CLOSE_GUI && canClose(player)) {
             event.whoClicked.closeInventory()
