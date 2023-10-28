@@ -3,6 +3,20 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     kotlin("jvm") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("maven-publish")
+}
+
+val pubComponent = components.find { it.name == "java" || it.name == "release" }
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.github.astridalia"
+            artifactId = "InventoryAPI"
+            version = "1.0.4"
+            from(components["java"])
+        }
+    }
 }
 
 group = "com.github.astridalia"
@@ -10,11 +24,11 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven("https://repo.aikar.co/content/groups/aikar/")
-    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-    maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://repo.mineinabyss.com/releases")
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven { url = uri("https://repo.aikar.co/content/groups/aikar/") }
+    maven { url = uri("https://hub.spigotmc.org/nexus/content/groups/public/") }
+    maven { url = uri("https://oss.sonatype.org/content/groups/public/") }
+    maven { url = uri("https://repo.mineinabyss.com/releases") }
+    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") }
 }
 
 dependencies {
