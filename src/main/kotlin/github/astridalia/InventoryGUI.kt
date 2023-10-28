@@ -7,7 +7,6 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.*
 
 abstract class InventoryGUI<T : JavaPlugin>(private val plugin: T) : InventoryHolder {
 

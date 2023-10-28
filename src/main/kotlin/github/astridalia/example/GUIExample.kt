@@ -36,7 +36,7 @@ class GUIExample(plugin: JavaPlugin) : InventoryGUI<JavaPlugin>(plugin) {
                 return null
             }
         })
-}
+    }
 
     override fun getInventory(): Inventory {
         return Bukkit.createInventory(this, size, title)
