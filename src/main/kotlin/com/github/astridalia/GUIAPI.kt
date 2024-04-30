@@ -10,41 +10,46 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 
 
-class InventoryAPI<T : JavaPlugin>(val plugin: T) : Listener {
-    private val playerToGUIMap: MutableMap<UUID, InventoryGUI<T>> = HashMap<UUID, InventoryGUI<T>>()
+class GUIAPI<T : JavaPlugin>(private val plugin: T) : Listener {
+    private val playerToGUIMap: MutableMap<UUID, GUI<T>> = HashMap()
 
     init {
-        check(plugin.isEnabled) { "Your plugin must be initialized before instantiating an instance of GUIAPI." }
+        check(plugin!!.isEnabled) { "Your plugin must be initialized before instantiating an instance of GUIAPI." }
+
         plugin.server
             .pluginManager
             .registerEvents(this, plugin)
     }
 
-    fun openGUI(player: Player, gui: InventoryGUI<T>) {
+    fun openGUI(player: Player, gui: GUI<T>) {
         gui.open(player)
         playerToGUIMap[player.uniqueId] = gui
     }
 
-    fun getOpenGUI(player: Player): InventoryGUI<T>? {
-        return playerToGUIMap[player.uniqueId]
+    fun getOpenGUI(player: Player): GUI<T> {
+        return playerToGUIMap[player.uniqueId]!!
     }
 
     @EventHandler
     private fun onClick(event: InventoryClickEvent) {
         if (event.whoClicked !is Player) return
-        val open: InventoryGUI<T> = getOpenGUI(event.whoClicked as Player) ?: return
+        val open = getOpenGUI(event.whoClicked as Player)
         open.handleOnClick(event)
     }
 
     @EventHandler
     private fun onInventoryClose(event: InventoryCloseEvent) {
-        if (event.player !is Player) return
-        val player = event.player as Player
-        val openGUI: InventoryGUI<T> = getOpenGUI(player) ?: return
+        val player = event.player as? Player ?: return
+        val openGUI = getOpenGUI(player)
         if (!openGUI.canClose(player)) {
-                Bukkit.getScheduler().runTaskTimer(plugin, Runnable { openGUI.open(player) }, 0L, 2L)
+            Bukkit.getServer()
+                .scheduler
+                .runTaskLater(plugin, Runnable {
+                    openGUI.open(player)
+                }, 10)
             return
         }
+
         openGUI.onClose(player)
         playerToGUIMap.remove(player.uniqueId)
     }
