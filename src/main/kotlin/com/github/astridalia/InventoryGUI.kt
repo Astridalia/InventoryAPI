@@ -8,7 +8,7 @@ import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
-abstract class InventoryGUI<T : JavaPlugin>(private val plugin: T) : InventoryHolder {
+abstract class InventoryGUI<T : JavaPlugin>(val plugin: T) : InventoryHolder {
 
 
     private val itemPositionMap: MutableMap<Int, InventoryItem> = mutableMapOf()
