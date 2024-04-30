@@ -10,11 +10,13 @@ import org.bukkit.plugin.java.JavaPlugin
 
 abstract class InventoryGUI<T : JavaPlugin>(private val plugin: T) : InventoryHolder {
 
-    private val inventory: Inventory = Bukkit.createInventory(this, size, title)
+
     private val itemPositionMap: MutableMap<Int, InventoryItem> = mutableMapOf()
+
 
     protected abstract val size: Int
     protected abstract val title: String
+    private val inventory: Inventory = Bukkit.createInventory(this, size, title)
     abstract fun canClose(player: Player): Boolean
 
     open fun onClose(player: Player) {}

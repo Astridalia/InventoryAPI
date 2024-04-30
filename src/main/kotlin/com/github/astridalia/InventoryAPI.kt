@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 
 
-class InventoryAPI<T : JavaPlugin>(private val plugin: T) : Listener {
+class InventoryAPI<T : JavaPlugin>(val plugin: T) : Listener {
     private val playerToGUIMap: MutableMap<UUID, InventoryGUI<T>> = HashMap<UUID, InventoryGUI<T>>()
 
     init {

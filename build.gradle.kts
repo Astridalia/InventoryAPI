@@ -20,7 +20,7 @@ publishing {
 }
 
 group = "com.github.astridalia"
-version = "1.0-SNAPSHOT"
+version = "1.0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -35,7 +35,7 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.5.0")
     implementation("org.reflections:reflections:0.10.2")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("org.spigotmc:spigot-api:1.14.1-R0.1-SNAPSHOT")
+    implementation("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
     testImplementation(kotlin("test"))
 }
 
