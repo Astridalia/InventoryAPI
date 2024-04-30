@@ -11,10 +11,10 @@ import java.util.*
 
 
 class GUIAPI<T : JavaPlugin>(private val plugin: T) : Listener {
-    private val playerToGUIMap: MutableMap<UUID, GUI<T>> = HashMap()
+    private val playerToGUIMap: MutableMap<UUID, GUI<T>> = mutableMapOf()
 
     init {
-        check(plugin!!.isEnabled) { "Your plugin must be initialized before instantiating an instance of GUIAPI." }
+        check(plugin.isEnabled) { "Your plugin must be initialized before instantiating an instance of GUIAPI." }
 
         plugin.server
             .pluginManager
@@ -26,21 +26,21 @@ class GUIAPI<T : JavaPlugin>(private val plugin: T) : Listener {
         playerToGUIMap[player.uniqueId] = gui
     }
 
-    fun getOpenGUI(player: Player): GUI<T> {
-        return playerToGUIMap[player.uniqueId]!!
+    fun getOpenGUI(player: Player): GUI<T>? {
+        return playerToGUIMap[player.uniqueId]
     }
 
     @EventHandler
     private fun onClick(event: InventoryClickEvent) {
         if (event.whoClicked !is Player) return
-        val open = getOpenGUI(event.whoClicked as Player)
+        val open = getOpenGUI(event.whoClicked as Player) ?: return
         open.handleOnClick(event)
     }
 
     @EventHandler
     private fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player ?: return
-        val openGUI = getOpenGUI(player)
+        val openGUI = getOpenGUI(player) ?: return
         if (!openGUI.canClose(player)) {
             Bukkit.getServer()
                 .scheduler

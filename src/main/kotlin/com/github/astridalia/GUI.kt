@@ -7,53 +7,43 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.function.BiConsumer
 
 
-abstract class GUI<T : JavaPlugin?>(val plugin: T) : InventoryHolder {
+abstract class GUI<T : JavaPlugin?>(private val plugin: T) : InventoryHolder {
     private val inventory: Inventory
-
-    private val itemPositionMap: MutableMap<Int, GUIItem> = HashMap()
+    private val slotItemMap: MutableMap<Int, GUIItem> = HashMap()
 
     init {
-        this.inventory = Bukkit.createInventory(this, size, title!!)
+        this.inventory = Bukkit.createInventory(this, inventorySize, inventoryTitle)
     }
 
-    abstract val size: Int
-    abstract val title: String?
+    protected abstract val inventorySize: Int
+    protected abstract val inventoryTitle: String
 
     abstract fun canClose(player: Player?): Boolean
 
-    fun onClose(player: Player?) {}
+    open fun onClose(player: Player?) {}
 
-    protected fun generate() {
-        itemPositionMap.forEach { (index: Int?, item: GUIItem) ->
-            inventory.setItem(
-                index, item.itemStack
-            )
+    protected fun generateInventory() {
+        slotItemMap.forEach { (index, item) ->
+            inventory.setItem(index, item.itemStack)
         }
     }
 
-    private fun set(index: Int, item: GUIItem?) {
-        require(index < size) { "Invalid index " + index + " for inventory of size " + size + " [" + javaClass.name + "]" }
+    private fun setSlotItem(index: Int, item: GUIItem?) {
+        require(index < inventorySize) { "Invalid index $index for inventory of size $inventorySize [${javaClass.name}]" }
 
-        itemPositionMap.remove(index)
-        if (item?.itemStack != null) {
-            itemPositionMap[index] = item
-        }
+        slotItemMap.remove(index)
+        item?.let { slotItemMap[index] = it }
 
-        generate()
+        generateInventory()
     }
 
-    protected fun set(index: Int, itemStack: ItemStack) {
-        set(index, GUIItem(null, itemStack))
+    protected fun setSlotItem(index: Int, itemStack: ItemStack, onClick: ButtonCompletion? = null) {
+        setSlotItem(index, GUIItem(onClick, itemStack))
     }
 
-    protected fun set(index: Int, itemStack: ItemStack, onClick: ButtonCompletion) {
-        set(index, GUIItem(onClick, itemStack))
-    }
-
-    protected fun clear() {
+    protected fun clearInventory() {
         inventory.clear()
     }
 
@@ -67,28 +57,22 @@ abstract class GUI<T : JavaPlugin?>(val plugin: T) : InventoryHolder {
     }
 
     fun open(player: Player) {
-        generate()
+        generateInventory()
         player.openInventory(inventory)
     }
 
     fun handleOnClick(event: InventoryClickEvent) {
-        if (event.clickedInventory == null) return
         if (event.clickedInventory != inventory) return
         if (event.whoClicked !is Player) return
 
         val index = event.slot
-        val item: GUIItem = itemPositionMap[index] ?: return
-
-        if (item.onClick == null) {
-            event.isCancelled = true
-            return
-        }
-
-        val player = event.whoClicked as Player
+        val item = slotItemMap[index] ?: return
 
         event.isCancelled = true
 
-        val result: ButtonAction? = item.onClick.onClick(player, event.currentItem)
+        val player = event.whoClicked as Player
+        val result = item.onClick?.onClick(player, event.currentItem)
+
         if (result == ButtonAction.CLOSE_GUI && canClose(player)) {
             event.whoClicked.closeInventory()
         }
