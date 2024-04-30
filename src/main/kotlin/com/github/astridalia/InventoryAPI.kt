@@ -42,7 +42,6 @@ class InventoryAPI<T : JavaPlugin>(val plugin: T) : Listener {
         val player = event.player as Player
         val openGUI: InventoryGUI<T> = getOpenGUI(player) ?: return
         if (!openGUI.canClose(player)) {
-            // Delay task to prevent overflow
             Bukkit.getScheduler().runTaskTimer(plugin, Runnable { openGUI.open(player) }, 0L, 2L)
             return
         }
