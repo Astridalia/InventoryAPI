@@ -3,18 +3,18 @@ package com.github.astridalia
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
-abstract class InventoryGUI<T : JavaPlugin>(val plugin: T) : InventoryHolder {
+abstract class InventoryGUI<T : JavaPlugin>(open val plugin: T, open val size: Int = InventoryType.CHEST.defaultSize) : InventoryHolder {
 
 
     private val itemPositionMap: MutableMap<Int, InventoryItem> = mutableMapOf()
 
 
-    protected abstract val size: Int
     protected abstract val title: String
     private val inventory: Inventory = Bukkit.createInventory(this, size, title)
     abstract fun canClose(player: Player): Boolean
