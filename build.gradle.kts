@@ -13,14 +13,14 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.github.astridalia"
             artifactId = "InventoryAPI"
-            version = "1.0.0-SNAPSHOT"
+            version = "1.0.2-SNAPSHOT"
             from(components["java"])
         }
     }
 }
 
 group = "com.github.astridalia"
-version = "1.0.1-SNAPSHOT"
+version = "1.0.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
