@@ -10,7 +10,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
-class GUIExample(plugin: JavaPlugin) : InventoryGUI<JavaPlugin>(plugin) {
+class GUIExample(plugin: JavaPlugin) : InventoryGUI<JavaPlugin>(plugin, 9, "Hello") {
     private var clicks = 1
 
     init {

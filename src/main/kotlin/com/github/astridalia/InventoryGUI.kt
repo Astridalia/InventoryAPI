@@ -9,7 +9,7 @@ import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
-abstract class InventoryGUI<T : JavaPlugin>(open val plugin: T, open val size: Int = InventoryType.CHEST.defaultSize) : InventoryHolder {
+abstract class InventoryGUI<T : JavaPlugin>(open val plugin: T, open val size: Int = InventoryType.CHEST.defaultSize, open val title: String) : InventoryHolder {
 
 
     private val itemPositionMap: MutableMap<Int, InventoryItem> = mutableMapOf()
@@ -24,7 +24,6 @@ abstract class InventoryGUI<T : JavaPlugin>(open val plugin: T, open val size: I
         return Bukkit.createInventory(this, validSize, title)
     }
 
-    protected abstract val title: String
     private val inventory: Inventory = createInventory()
     abstract fun canClose(player: Player): Boolean
 
