@@ -13,16 +13,14 @@ abstract class GUI<T : JavaPlugin?>(private val plugin: T) : InventoryHolder {
     private val inventory: Inventory
     private val slotItemMap: MutableMap<Int, GUIItem> = HashMap()
 
+    protected abstract val inventorySize: Int
+    protected abstract val inventoryTitle: String
+
     init {
         this.inventory = Bukkit.createInventory(this, inventorySize, inventoryTitle)
     }
 
-    protected abstract val inventorySize: Int
-    protected abstract val inventoryTitle: String
-
     abstract fun canClose(player: Player?): Boolean
-
-    open fun onClose(player: Player?) {}
 
     protected fun generateInventory() {
         slotItemMap.forEach { (index, item) ->
@@ -32,10 +30,8 @@ abstract class GUI<T : JavaPlugin?>(private val plugin: T) : InventoryHolder {
 
     private fun setSlotItem(index: Int, item: GUIItem?) {
         require(index < inventorySize) { "Invalid index $index for inventory of size $inventorySize [${javaClass.name}]" }
-
         slotItemMap.remove(index)
         item?.let { slotItemMap[index] = it }
-
         generateInventory()
     }
 
