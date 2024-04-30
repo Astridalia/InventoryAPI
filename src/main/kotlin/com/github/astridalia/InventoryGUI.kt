@@ -14,9 +14,18 @@ abstract class InventoryGUI<T : JavaPlugin>(open val plugin: T, open val size: I
 
     private val itemPositionMap: MutableMap<Int, InventoryItem> = mutableMapOf()
 
+    private fun createInventory(): Inventory {
+        val validSize = when {
+            size < 9 -> 9
+            size > 54 -> 54
+            size % 9 != 0 -> (size / 9 + 1) * 9
+            else -> size
+        }
+        return Bukkit.createInventory(this, validSize, title)
+    }
 
     protected abstract val title: String
-    private val inventory: Inventory = Bukkit.createInventory(this, size, title)
+    private val inventory: Inventory = createInventory()
     abstract fun canClose(player: Player): Boolean
 
     open fun onClose(player: Player) {}
@@ -52,6 +61,8 @@ abstract class InventoryGUI<T : JavaPlugin>(open val plugin: T, open val size: I
         generate()
         player.openInventory(inventory)
     }
+
+
 
     open fun handleOnClick(event: InventoryClickEvent) {
 
