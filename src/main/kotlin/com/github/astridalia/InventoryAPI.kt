@@ -42,7 +42,7 @@ class InventoryAPI<T : JavaPlugin>(val plugin: T) : Listener {
         val player = event.player as Player
         val openGUI: InventoryGUI<T> = getOpenGUI(player) ?: return
         if (!openGUI.canClose(player)) {
-            Bukkit.getScheduler().runTaskTimer(plugin, Runnable { openGUI.open(player) }, 0L, 2L)
+                Bukkit.getScheduler().runTaskTimer(plugin, Runnable { openGUI.open(player) }, 0L, 2L)
             return
         }
         openGUI.onClose(player)

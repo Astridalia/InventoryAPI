@@ -21,6 +21,7 @@ abstract class InventoryGUI<T : JavaPlugin>(open val plugin: T, open val size: I
             size % 9 != 0 -> (size / 9 + 1) * 9
             else -> size
         }
+        require(title.isNotBlank()) { "Title cannot be null or blank" }
         return Bukkit.createInventory(this, validSize, title)
     }
 
